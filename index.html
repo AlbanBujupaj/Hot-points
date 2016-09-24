@@ -1,0 +1,123 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Hot Point Adder</title>
+<meta name="description" content="">
+<meta name="msapplication-tap-highlight" content="yes" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0" />
+
+<link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Old+Standard+TT:400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+
+
+<div class="container">
+	<div class="image">
+
+		<!-- <span class="slogan">Fashion of a week</span> -->
+		<img src="image.jpg" alt="">
+		<ul class="points-wrapper"></ul>
+
+		<button class="btn add-points">Add Points</button>
+	</div>
+</div>
+	
+   	<!-- Latest compiled and minified CSS -->
+	<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+ 	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="js/main.js"></script>
+	
+	<script type="text/x-hotspot-template" id="item-template">
+
+		<li class="point single-point ui-draggable ui-draggable-handle ui-draggable-dragging" style="top: 50%; left: 0"> 
+		  <a class="img-replace" href="#0">More info</a>
+		    <div class="more-info left">
+		        <div class="image-thumb"><img src="img/black-tie.jpg" alt=""></div>
+		        <div class="info-detail">
+		            <h2>Black Tie</h2> <span class="price">$28.00</span> 
+	              <a href="#" class="btn btn-cart">Add to cart</a> 
+		        </div>
+	              <a href="#0" class="close-info img-replace">Close</a> 
+		    </div>
+		</li>
+		
+	</script>
+
+	<script>
+		var HotSpot = new (function () {
+			var self = this;
+			self.items = null;
+			self.itemClass = '.point';
+			self.holderClass = ".image";
+
+			self.init = function init(){
+				self.loadItemsFromStorage();
+				self.loadItemsIntoHolder();
+				self.makeDraggable();
+			};
+
+			self.save = function(){
+				var items = [];
+				$(this.itemClass).each(function(index, item){
+					var currentItem = $('<div />').append($(item).clone());
+					items.push($(currentItem).html().replace('is-open','').replace('visited',''));
+				});
+				localStorage.items = null;
+				localStorage.items = JSON.stringify(items);
+			};
+
+			self.loadItemsIntoHolder = function(){
+				var holder = $(self.holderClass).find('.points-wrapper');
+				
+				if(self.items instanceof Array)
+				{
+					self.items.forEach(function(elem, index){
+						holder.append(elem);
+					});
+				}
+			};
+
+			self.loadItemsFromStorage = function(){
+				self.items = JSON.parse(localStorage.items || "{}");
+			};
+
+			self.makeDraggable = function(){
+		  		$(self.itemClass).draggable({
+		          containment: self.holderClass,
+		          scroll: false,
+		          stop: function (event, ui) {
+		          	   $(this).css("left",parseInt($(this).css("left")) / ($(self.holderClass).width() / 100)+"%");
+		               $(this).css("top",parseInt($(this).css("top")) / ($(self.holderClass).height() / 100)+"%");
+
+		               self.save();
+		          }
+		      });
+			};
+
+
+		})();
+
+		  $(function () {
+		  	HotSpot.init();
+		  });
+
+		// Add points
+		$('.add-points').on('click', function(event){
+			event.preventDefault();
+			var pointArea = $('.points-wrapper');
+			pointArea.append($('#item-template').html());
+			HotSpot.makeDraggable();
+		});
+			
+	</script>
+</body>
+</html>
