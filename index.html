@@ -32,8 +32,8 @@
 </div>
 	
    	<!-- Latest compiled and minified CSS -->
-	<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
- 	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="js/vendor/jquery-1.10.2.js"></script>
+ 	<script src="js/vendor/jquery-ui.js"></script>
 	<script src="js/main.js"></script>
 	
 	<script type="text/x-hotspot-template" id="item-template">
@@ -97,7 +97,6 @@
 		          stop: function (event, ui) {
 		          	   $(this).css("left",parseInt($(this).css("left")) / ($(self.holderClass).width() / 100)+"%");
 		               $(this).css("top",parseInt($(this).css("top")) / ($(self.holderClass).height() / 100)+"%");
-
 		               self.save();
 		          }
 		      });
